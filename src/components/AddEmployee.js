@@ -29,6 +29,7 @@ export default function AddEmployee() {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
+  const [password, setPassword] = useState(""); // เพิ่ม state สำหรับรหัสผ่าน
   const navigate = useNavigate(); // ใช้ useNavigate สำหรับการนำทาง
 
   const handleSubmit = async (e) => {
@@ -41,7 +42,8 @@ export default function AddEmployee() {
         firstName,
         lastName,
         email,
-        gender
+        gender,
+        password, // ส่งรหัสผ่านไปยัง API
       }, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -62,6 +64,10 @@ export default function AddEmployee() {
 
   const handleViewEmployees = () => {
     navigate('/EmployeeList'); // นำทางไปยังหน้า EmployeeList เมื่อคลิกปุ่ม
+  }
+
+  const handleBackToDashboard = () => {
+    navigate('/Dashboard'); // นำทางกลับไปยังหน้า Dashboard เมื่อคลิกปุ่ม
   }
 
   return (
@@ -98,6 +104,19 @@ export default function AddEmployee() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoFocus
+              variant="outlined"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label="รหัสผ่าน"
+              name="password"
+              type="password" // ระบุให้เป็น type password
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               variant="outlined"
             />
             <TextField
@@ -165,6 +184,15 @@ export default function AddEmployee() {
               onClick={handleViewEmployees}
             >
               ดูข้อมูลพนักงาน
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="secondary"
+              sx={{ mt: 2 }}
+              onClick={handleBackToDashboard}
+            >
+              กลับไปหน้า Dashboard
             </Button>
           </Box>
         </Box>

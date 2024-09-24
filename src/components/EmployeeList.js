@@ -39,10 +39,9 @@ export default function EmployeeList() {
     navigate('/AddEmployee'); // เปลี่ยนไปยังเส้นทาง /AddEmployee
   };
 
-  // ฟังก์ชันเพื่อทำการ logout
-  const handleLogout = () => {
-    localStorage.removeItem('token'); // ลบ token ออกจาก localStorage
-    navigate('/AdminLogin'); // เปลี่ยนไปยังหน้า login
+  // ฟังก์ชันเพื่อกลับไปหน้า Dashboard
+  const handleBackToDashboard = () => {
+    navigate('/Dashboard'); // เปลี่ยนไปยังหน้า Dashboard
   };
 
   return (
@@ -55,10 +54,10 @@ export default function EmployeeList() {
       <Button variant="contained" color="primary" onClick={handleAddEmployee} sx={{ mr: 2 }}>
         เพิ่มพนักงาน
       </Button>
-      
-      {/* ปุ่ม Logout */}
-      <Button variant="contained" color="secondary" onClick={handleLogout}>
-        ออกจากระบบ
+
+      {/* ปุ่มกลับไป Dashboard */}
+      <Button variant="contained" color="secondary" onClick={handleBackToDashboard}>
+        กลับไปหน้า Dashboard
       </Button>
 
       <Table sx={{ mt: 3 }}>

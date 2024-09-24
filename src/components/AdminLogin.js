@@ -43,7 +43,7 @@ export default function SignIn() {
 
       if (result['status'] === true) {
         localStorage.setItem('token', result['token']);
-        window.location.href = '/addemployee'; // เปลี่ยนเส้นทางไปยังหน้า AddEmployee
+        window.location.href = '/Dashboard'; // เปลี่ยนเส้นทางไปยังหน้า AddEmployee
       }
     } catch (error) {
       console.error('Error logging in', error);
