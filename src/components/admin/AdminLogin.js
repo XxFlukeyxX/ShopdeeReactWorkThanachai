@@ -43,7 +43,7 @@ export default function SignIn() {
 
       if (result['status'] === true) {
         localStorage.setItem('token', result['token']);
-        window.location.href = '/Dashboard'; // เปลี่ยนเส้นทางไปยังหน้า AddEmployee
+        window.location.href = '/admin/Dashboard'; // เปลี่ยนเส้นทางไปยังหน้า 
       }
     } catch (error) {
       console.error('Error logging in', error);
@@ -104,6 +104,8 @@ export default function SignIn() {
               label="จำฉันไว้ในระบบ"
             />
             <Button
+              name="btnLogin"
+              id="btnLogin"
               type="submit"
               fullWidth
               variant="contained"

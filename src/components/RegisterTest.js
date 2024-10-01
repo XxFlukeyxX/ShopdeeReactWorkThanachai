@@ -27,8 +27,6 @@ export default function AddEmployee() {
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
   const [password, setPassword] = useState(""); // เพิ่ม state สำหรับรหัสผ่าน
   const navigate = useNavigate(); // ใช้ useNavigate สำหรับการนำทาง
 
@@ -37,12 +35,10 @@ export default function AddEmployee() {
 
     try {
       const token = localStorage.getItem('token'); // ดึง token จาก local storage
-      const response = await axios.post('http://localhost:4000/api/employee', {
+      const response = await axios.post('http://localhost:4000/api/register', {
         username,
         firstName,
         lastName,
-        email,
-        gender,
         password, // ส่งรหัสผ่านไปยัง API
       }, {
         headers: {
@@ -55,19 +51,11 @@ export default function AddEmployee() {
       alert(result['message']);
 
       if (result['status'] === true) {
-        navigate('/EmployeeList'); // เปลี่ยนเส้นทางไปยังหน้า EmployeeList
+        navigate('/SignIn'); // เปลี่ยนเส้นทางไปยังหน้า SignIn หลังจากสมัครสมาชิกสำเร็จ
       }
     } catch (error) {
       console.error('Error adding employee', error);
     }
-  }
-
-  const handleViewEmployees = () => {
-    navigate('/EmployeeList'); // นำทางไปยังหน้า EmployeeList เมื่อคลิกปุ่ม
-  }
-
-  const handleBackToDashboard = () => {
-    navigate('/Dashboard'); // นำทางกลับไปยังหน้า Dashboard เมื่อคลิกปุ่ม
   }
 
   return (
@@ -90,7 +78,7 @@ export default function AddEmployee() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            เพิ่มพนักงาน
+            สมัครสมาชิก
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -143,56 +131,15 @@ export default function AddEmployee() {
               onChange={(e) => setLastName(e.target.value)}
               variant="outlined"
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="อีเมล"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              variant="outlined"
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="gender"
-              label="เพศ"
-              name="gender"
-              autoComplete="gender"
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              variant="outlined"
-            />
             <Button
-              type="submit"
+              id="btnRegister"
               fullWidth
-              variant="contained"
+              variant="outlined"
               color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              เพิ่มพนักงาน
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="secondary"
               sx={{ mt: 2 }}
-              onClick={handleViewEmployees}
+              type="submit" // กดปุ่มเพื่อสมัครสมาชิก
             >
-              ดูข้อมูลพนักงาน
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              color="secondary"
-              sx={{ mt: 2 }}
-              onClick={handleBackToDashboard}
-            >
-              กลับไปหน้า Dashboard
+              สมัครสมาชิก
             </Button>
           </Box>
         </Box>

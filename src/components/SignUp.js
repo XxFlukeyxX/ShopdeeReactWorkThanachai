@@ -42,7 +42,7 @@ export default function SignUp() {
       e.preventDefault();
 
       try{
-          const response = await axios.post(process.env.REACT_APP_BASE_URL+'/register',
+          const response = await axios.post(process.env.REACT_APP_BASE_URL+'/api/register',
               {
                   username,
                   password,
@@ -55,7 +55,7 @@ export default function SignUp() {
           alert(result['message']);
 
           if(result['status'] === true){
-              window.location.href = '/';
+              window.location.href = '/SignIn';
           }
 
       }catch(err){
@@ -142,6 +142,7 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
+              id="btnLogin"
               type="submit"
               fullWidth
               variant="contained"

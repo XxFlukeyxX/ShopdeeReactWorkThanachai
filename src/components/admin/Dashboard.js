@@ -1,10 +1,16 @@
 import * as React from 'react';
-import { Grid, Card, CardContent, Typography, Container, AppBar, Toolbar, IconButton, Button } from '@mui/material';
+import { useState } from 'react';
+import { Grid, Card, CardContent, Typography, Container, AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useNavigate } from 'react-router-dom';  // นำเข้า useNavigate
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // ลงทะเบียน scale ที่ต้องใช้ใน Chart.js
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
@@ -21,23 +27,38 @@ const defaultTheme = createTheme({
   },
 });
 
-export default function Dashboard() {
+export default function DashboardWithSidebar() {
   const navigate = useNavigate(); // สร้างตัวแปรเพื่อใช้สำหรับการนำทาง
+  const [drawerOpen, setDrawerOpen] = useState(false); // สร้าง state สำหรับควบคุม Drawer
+
+  // ฟังก์ชันสำหรับเปิด/ปิด Drawer
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
 
   // ฟังก์ชันสำหรับนำทางไปยังหน้าอื่น ๆ
-  const handleAddEmployee = () => {
-    navigate('/AddEmployee');  // นำทางไปยังหน้า AddEmployee
+  const handleNavigation = (path) => {
+    setDrawerOpen(false); // ปิด Drawer เมื่อคลิก
+    navigate(path); // นำทางไปยังหน้าที่ระบุ
   };
 
-  const handleViewEmployees = () => {
-    navigate('/EmployeeList');  // นำทางไปยังหน้า EmployeeList
-  };
-
-  const handleLogout = () => {
-    // ทำการลบ token หรือข้อมูลที่เกี่ยวข้องกับการเข้าสู่ระบบ
-    localStorage.removeItem('token');
-    navigate('/AdminLogin');  // นำทางไปยังหน้า Login
-  };
+  // ข้อมูลเมนูที่จะแสดงใน Sidebar
+  const menuItems = [
+    { text: 'แดชบอร์ด', icon: <DashboardIcon />, path: '/admin/Dashboard' },
+    { text: 'รายการสั่งซื้อ', icon: <ShoppingCartIcon />, path: '/Orders' },
+    { text: 'ลูกค้า', icon: <PeopleIcon />, path: '/admin/Customer' },
+    { text: 'พนักงาน', icon: <PeopleIcon />, path: '/admin/EmployeeList' },
+    { text: 'ประเภทสินค้า', icon: <CategoryIcon />, path: '/Categories' },
+    { text: 'สินค้า', icon: <CategoryIcon />, path: '/Products' },
+    { text: 'ออกจากระบบ', icon: <LogoutIcon />, action: () => {
+        localStorage.removeItem('token');
+        navigate('/admin/AdminLogin');
+      }
+    },
+  ];
 
   // ข้อมูลสำหรับ Line Chart (Sessions)
   const lineData = {
@@ -68,21 +89,38 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {/* AppBar สำหรับหัวข้อของ Dashboard */}
+      {/* AppBar สำหรับแสดง MenuIcon */}
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }} onClick={toggleDrawer(true)}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Dashboard
+            แดชบอร์ด
           </Typography>
-          <Button color="inherit" onClick={handleAddEmployee}>เพิ่มพนักงาน</Button>
-          <Button color="inherit" onClick={handleViewEmployees}>ดูข้อมูลพนักงาน</Button>
-          <Button color="inherit" onClick={handleLogout}>ออกจากระบบ</Button>
         </Toolbar>
       </AppBar>
 
+      {/* Drawer สำหรับแสดง Sidebar */}
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        <div
+          role="presentation"
+          onClick={toggleDrawer(false)}
+          onKeyDown={toggleDrawer(false)}
+        >
+          <List>
+            {menuItems.map((item, index) => (
+              <ListItem button key={item.text} onClick={() => item.path ? handleNavigation(item.path) : item.action()}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+          <Divider />
+        </div>
+      </Drawer>
+
+      {/* ส่วนที่เหลือของ Dashboard */}
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         {/* Overview Section */}
         <Typography variant="h5" component="div" gutterBottom>

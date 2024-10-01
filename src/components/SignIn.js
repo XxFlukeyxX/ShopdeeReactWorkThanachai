@@ -52,7 +52,7 @@ export default function SignIn() {
  
         if(result['status'] === true){
             localStorage.setItem('token', result['token']);
-            window.location.href = '/';
+            window.location.href = '/SignUp';
         }
     }
  
@@ -109,7 +109,7 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              เข้าสู่ระบบ
             </Button>
             <Grid container>
               <Grid item xs>
